@@ -1,41 +1,153 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>32.inches Store</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>32inches WebShop</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0d0d0d;
+      color: #ffffff;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.5rem;
+      background-color: #1a1a1a;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      padding: 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .product {
+      background: #1a1a1a;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product button {
+      background: #ffffff;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .cart {
+      margin-top: 2rem;
+      background: #262626;
+      padding: 1rem;
+      border-radius: 12px;
+    }
+
+    .cart h2 {
+      margin: 0 0 1rem;
+    }
+
+    .cart ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cart li {
+      margin-bottom: 0.5rem;
+    }
+
+    .checkout {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      width: 100%;
+      background: #00b894;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <img src="assets/logo.png" alt="32.inches" class="logo" />
-    </header>
-    <main>
-        <section class="product">
-            <img src="assets/shorts.jpg" alt="32Tribal Shorts" />
-            <h2>32&quot;Tribal</h2>
-            <p>111BYN / 3100RUB</p>
-            <p>M/L — камуфляжные, шнурок, глубокие карманы</p>
-        </section>
-        <section class="product">
-            <img src="assets/pants.jpg" alt="32Fleece Pants" />
-            <h2>32FLEECE</h2>
-            <p>105BYN / 3000RUB</p>
-            <p>Флис, шнурок, бирка, QR на упаковке</p>
-        </section>
-        <section class="product">
-            <img src="assets/hat.jpg" alt="32HAT" />
-            <h2>32HAT</h2>
-            <p>25BYN / 750RUB</p>
-            <p>100% акрил, качественное лого</p>
-        </section>
-        <section class="product">
-            <img src="assets/lighter.jpg" alt="32Lighter" />
-            <h2>32"Lighter"</h2>
-            <p>8BYN / 270RUB</p>
-            <p>Чёрный / Красный / Белый</p>
-        </section>
-    </main>
+  <header>32inches WebShop</header>
+
+  <div class="container">
+    <div class="product">
+      <div>
+        <strong>Толстовка</strong><br>$39
+      </div>
+      <button onclick="addToCart('Толстовка', 39)">Добавить</button>
+    </div>
+
+    <div class="product">
+      <div>
+        <strong>Футболка</strong><br>$25
+      </div>
+      <button onclick="addToCart('Футболка', 25)">Добавить</button>
+    </div>
+
+    <div class="product">
+      <div>
+        <strong>Шапка</strong><br>$15
+      </div>
+      <button onclick="addToCart('Шапка', 15)">Добавить</button>
+    </div>
+
+    <div class="cart" id="cart">
+      <h2>Корзина</h2>
+      <ul id="cart-items"></ul>
+      <strong>Сумма: $<span id="total">0</span></strong>
+      <button class="checkout" onclick="checkout()">Оформить заказ</button>
+    </div>
+  </div>
+
+  <script>
+    const cart = [];
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartList = document.getElementById('cart-items');
+      cartList.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - $${item.price}`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+
+      document.getElementById('total').textContent = total;
+    }
+
+    function checkout() {
+      const data = {
+        items: cart,
+        total: cart.reduce((sum, item) => sum + item.price, 0),
+      };
+      if (window.Telegram.WebApp) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        Telegram.WebApp.close();
+      } else {
+        alert('Telegram WebApp не инициализирован.');
+      }
+    }
+  </script>
 </body>
 </html>
