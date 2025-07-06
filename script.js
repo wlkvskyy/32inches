@@ -1,3 +1,1 @@
-function buyProduct() {
-    alert("Спасибо за покупку!");
-}
+console.log('Hello from 32inches');
